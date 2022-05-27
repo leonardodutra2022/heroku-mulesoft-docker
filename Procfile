@@ -1,0 +1,1 @@
+web: ./bin/mule -M-DPORT=$PORT -M-Dmule.agent.enabled=true

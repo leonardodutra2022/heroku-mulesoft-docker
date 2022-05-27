@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="simplehttpFlow" doc:id="a525ca0d-af2a-450b-8cf7-e412ff3cff1b" >
+		<http:listener doc:name="Listener" doc:id="8064e0e9-6abd-4bbc-9f37-1a5580a6700b" path="/api" config-ref="common_listener"/>
+		<logger level="INFO" doc:name="Logger" doc:id="47c4aff0-36ba-4c25-8805-4812dd69842b" message="Request recieved and sending response"/>
+		<ee:transform doc:name="Transform Message" doc:id="79697ced-f3b5-4531-b501-6c143a7a8f97" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+data: {
+	'result':'success',
+	'username': 'leo',
+	'message': 'test',
+	'list': [
+		{'1': 1000}
+	]
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="apiFlow" doc:id="7befb345-7d94-4286-8e07-fd5a50e52462" >
+		<http:listener doc:name="Listener" doc:id="5a94e3d6-96b4-405f-81a5-080c148463fe" path="/" config-ref="common_listener"/>
+		<logger level="INFO" doc:name="Logger" doc:id="87590a98-9c1b-4061-a0a1-164d4db27a95" />
+		<parse-template doc:name="Parse Template" doc:id="50275bfd-2688-4032-8391-436bbc7f5d00" outputMimeType="text/html">
+			<content >&lt;h1&gt;Hello World&lt;/h1&gt;</content>
+		</parse-template>
+	</flow>
+
+</mule>
